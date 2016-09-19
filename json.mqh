@@ -787,6 +787,26 @@ class JSONIterator {
 
 };
 
+string StringArrayToJson( int sizeArray, string& strArray[] ) {
+
+	string strJson = "[";
+	//int n = ArraySize( strArray );
+	for( int ind = 0; ind <= sizeArray; ind++ ) {
+		
+		if(ind>0)
+			strJson = strJson + ",";
+			
+		strJson = strJson + strArray[ind];
+	
+	};
+	strJson = strJson + "]";
+	return strJson;
+	
+}
+
+
+}
+
 void json_demo() 
 {
     string s = "{ \"firstName\": \"John\", \"lastName\": \"Smith\", \"age\": 25, \"address\": { \"streetAddress\": \"21 2nd Street\", \"city\": \"New York\", \"state\": \"NY\", \"postalCode\": \"10021\" }, \"phoneNumber\": [ { \"type\": \"home\", \"number\": \"212 555-1234\" }, { \"type\": \"fax\", \"number\": \"646 555-4567\" } ], \"gender\":{ \"type\":\"male\" }  }";

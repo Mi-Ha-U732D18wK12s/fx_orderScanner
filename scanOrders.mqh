@@ -13,18 +13,20 @@
 class scanOrders
   {
 private:
+		string strFileName;
 
 public:
-                     scanOrders();
-                    ~scanOrders();
-                    
-                    void scan();
+		scanOrders();
+		~scanOrders();
+		string scan();
+		bool scanAndSave();
   };
 //+------------------------------------------------------------------+
 //|                                                                  |
 //+------------------------------------------------------------------+
-scanOrders::scanOrders()
+scanOrders::scanOrders(String nameStorage)
   {
+	strFileName = nameStorage;
   }
 //+------------------------------------------------------------------+
 //|                                                                  |
@@ -33,38 +35,62 @@ scanOrders::~scanOrders()
   {
   }
 //+------------------------------------------------------------------+
-void scanOrders::scan()
-  {
+string scanOrders::scan()
+{
       int cnt = OrdersTotal();
-      for (int i=0; i<cnt; i++) {
+	  
+	  if(cnt <= 0)
+		return;
+		
+	  string strJson = "[";
+	  orderState arrayOrderSt[];
+	  ArrayResize(arrayOrderSt,cnt,2);
+	  ArrayInitialize(arrayOrderSt,new orderState());
+	  
+	  string arrayStrJson[];
+	  ArrayResize(arrayStrJson,cnt,2);
+	  ArrayInitialize(arrayStrJson, "");
+	  
+	  int cntOrders = 0;
+	  
+      for (int ind=0; ind<cnt; ind++) {
       
-         if (!OrderSelect(i, SELECT_BY_POS, MODE_TRADES)) continue;
-         string sumb = OrderSymbol();
-         Print("sumb:" + sumb);
-         
-         int omag = OrderMagicNumber();
-         Print("omag:" + omag);
-       
-         double openpric = OrderOpenPrice();
-         Print("openpric:" + openpric);
-       
-         double  ol = OrderLots();
-         Print("ol:" + ol);
-         
-         datetime  otime = OrderOpenTime();
-         Print("otime:" + otime);
-         
-         double  profit = OrderTakeProfit();
-         Print("profit:" + profit);
-         
-         double  stop = OrderStopLoss();
-         Print("stop:" + stop);
-         
-         int  tic = OrderTicket();
-         Print("tic:#" + tic);
-         
-         int  type = OrderType();
-         Print("type:" + type);
-       
+			if (!OrderSelect(ind, SELECT_BY_POS, MODE_TRADES)) continue;
+	  
+			arrayOrderSt[ind].setOrderTicket(OrderTicket());
+			arrayOrderSt[ind].setSymbol(OrderSymbol());
+			arrayOrderSt[ind].setOpenPrice(OrderOpenPrice());
+			arrayOrderSt[ind].setOrderLots(OrderLots());
+			arrayOrderSt[ind].setOrderOpenTime(OrderOpenTime());
+			arrayOrderSt[ind].setOrderType(OrderType());
+			arrayOrderSt[ind].setStrOrderType(string strOrderType);
+			arrayOrderSt[ind].setOrderTakeProfit(OrderTakeProfit());
+			arrayOrderSt[ind].setOrderStopLoss(OrderStopLoss());
+			cntOrders++;
+			arrayStrJson[ind] = arrayOrderSt[ind].toJson();
       }
-  }
+
+	  return StringArrayToJson( cntOrders, arrayStrJson);
+}
+
+bool scanOrders::scanAndSave()
+{
+	string strOrders = scan();
+	  
+	//Стираем файлы
+	if(FileIsExist(strFileName)){
+		FileDelete(strFileName);
+	}
+
+	int handle=FileOpen( strFileName,FILE_READ|FILE_WRITE|FILE_TXT );
+	if(handle!=INVALID_HANDLE){
+		FileWriteString(handle, strOrders);
+		//Закрываем
+		FileFlush(handle);
+		FileClose(handle);
+		
+		return true;
+	}
+	return false;
+	  
+}
