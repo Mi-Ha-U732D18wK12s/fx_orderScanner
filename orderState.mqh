@@ -29,25 +29,25 @@ public:
 		 orderState();
 		~orderState();
 		
-		public int getOrderTicket();
-		public void setOrderTicket(int orderTicket);
-		public string getSymbol();
-		public void setSymbol(string symbol);
-		public double getOpenPrice();
-		public void setOpenPrice(double openPrice);
-		public double getOrderLots();
-		public void setOrderLots(double orderLots);
-		public datetime getOrderOpenTime();
-		public void setOrderOpenTime(datetime orderOpenTime);
-		public int getOrderType();
-		public void setOrderType(int orderType);
-		public string getStrOrderType();
-		public void setStrOrderType(string strOrderType);
-		public double getOrderTakeProfit();
-		public void setOrderTakeProfit(double orderTakeProfit);
-		public double getOrderStopLoss();
-		public void setOrderStopLoss(double orderStopLoss);
-		public string toJson();
+		int getOrderTicket();
+		void setOrderTicket(int orderTicket);
+		string getSymbol();
+		void setSymbol(string symbol);
+		double getOpenPrice();
+		void setOpenPrice(double openPrice);
+		double getOrderLots();
+		void setOrderLots(double orderLots);
+		datetime getOrderOpenTime();
+		void setOrderOpenTime(datetime orderOpenTime);
+		int getOrderType();
+		void setOrderType(int orderType);
+		string getStrOrderType();
+		void setStrOrderType(string strOrderType);
+		double getOrderTakeProfit();
+		void setOrderTakeProfit(double orderTakeProfit);
+		double getOrderStopLoss();
+		void setOrderStopLoss(double orderStopLoss);
+		string toJson();
 
   };
 //+------------------------------------------------------------------+
@@ -64,68 +64,68 @@ orderState::~orderState()
   }
 //+------------------------------------------------------------------+
 
-public int orderState::getOrderTicket() {
+int orderState::getOrderTicket() {
 	return orderTicket;
 }
 
-public void orderState::setOrderTicket(int orderTicket) {
+void orderState::setOrderTicket(int orderTicket) {
 	this.orderTicket = orderTicket;
 }
 
-public string orderState::getSymbol() {
+string orderState::getSymbol() {
 	return symbol;
 }
 
-public void orderState::setSymbol(string symbol) {
+void orderState::setSymbol(string symbol) {
 	this.symbol = symbol;
 }
 
-public double orderState::getOpenPrice() {
+double orderState::getOpenPrice() {
 	return openPrice;
 }
 
-public void orderState::setOpenPrice(double openPrice) {
+void orderState::setOpenPrice(double openPrice) {
 	this.openPrice = openPrice;
 }
 
-public double orderState::getOrderLots() {
+double orderState::getOrderLots() {
 	return orderLots;
 }
 
-public void orderState::setOrderLots(double orderLots) {
+void orderState::setOrderLots(double orderLots) {
 	this.orderLots = orderLots;
 }
 
-public datetime orderState::getOrderOpenTime() {
+datetime orderState::getOrderOpenTime() {
 	return orderOpenTime;
 }
 
-public void orderState::setOrderOpenTime(datetime orderOpenTime) {
+void orderState::setOrderOpenTime(datetime orderOpenTime) {
 	this.orderOpenTime = orderOpenTime;
 }
 
-public int orderState::getOrderType() {
+int orderState::getOrderType() {
 	return orderType;
 }
 
-public void orderState::setOrderType(int orderType) {
+void orderState::setOrderType(int orderType) {
 	this.orderType = orderType;
-	switch()
+	switch(orderType)
 	{
-		case 0: strOrderType = "OP_BUY";
-		case 1: strOrderType = "OP_SELL";
-		case 2: strOrderType = "OP_BUYLIMIT";
-		case 3: strOrderType = "OP_SELLLIMIT";
-		case 4: strOrderType = "OP_BUYSTOP";
-		case 5: strOrderType = "OP_SELLSTOP";
+		case 0: strOrderType = "OP_BUY"; break;
+		case 1: strOrderType = "OP_SELL";  break;
+		case 2: strOrderType = "OP_BUYLIMIT";  break;
+		case 3: strOrderType = "OP_SELLLIMIT";  break;
+		case 4: strOrderType = "OP_BUYSTOP";  break;
+		case 5: strOrderType = "OP_SELLSTOP";  break;
 	}
 }
 
-public string orderState::getStrOrderType() {
+string orderState::getStrOrderType() {
 	return strOrderType;
 }
 
-public void orderState::setStrOrderType(string strOrderType) {
+void orderState::setStrOrderType(string strOrderType) {
 	this.strOrderType = strOrderType;
 	
 	if(!StringCompare(strOrderType,"OP_BUY",false))
@@ -143,23 +143,23 @@ public void orderState::setStrOrderType(string strOrderType) {
 
 }
 
-public double orderState::getOrderTakeProfit() {
+double orderState::getOrderTakeProfit() {
 	return orderTakeProfit;
 }
 
-public void orderState::setOrderTakeProfit(double orderTakeProfit) {
+void orderState::setOrderTakeProfit(double orderTakeProfit) {
 	this.orderTakeProfit = orderTakeProfit;
 }
 
-public double orderState::getOrderStopLoss() {
+double orderState::getOrderStopLoss() {
 	return orderStopLoss;
 }
 
-public void orderState::setOrderStopLoss(double orderStopLoss) {
+void orderState::setOrderStopLoss(double orderStopLoss) {
 	this.orderStopLoss = orderStopLoss;
 }
 
-public string orderState::toJson(){
+string orderState::toJson(){
 		
 		string res = "{" 
 			+ "\"orderTicket\":" + orderTicket

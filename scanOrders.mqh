@@ -7,6 +7,10 @@
 #property link      "https://www.mql5.com"
 #property version   "1.00"
 #property strict
+
+#include "orderState.mqh"
+//#include "hash.mqh"
+//#include "json.mqh"
 //+------------------------------------------------------------------+
 //|                                                                  |
 //+------------------------------------------------------------------+
@@ -16,15 +20,22 @@ private:
 		string strFileName;
 
 public:
-		scanOrders();
+		scanOrders(string nameStorage);
 		~scanOrders();
 		string scan();
 		bool scanAndSave();
+		string StringArrayToJson( int sizeArray, string& strArray[] );
   };
 //+------------------------------------------------------------------+
 //|                                                                  |
 //+------------------------------------------------------------------+
-scanOrders::scanOrders(String nameStorage)
+/*
+scanOrders::scanOrders()
+  {
+	strFileName = "";
+  }*/
+  
+scanOrders::scanOrders(string nameStorage)
   {
 	strFileName = nameStorage;
   }
@@ -40,16 +51,16 @@ string scanOrders::scan()
       int cnt = OrdersTotal();
 	  
 	  if(cnt <= 0)
-		return;
+		return "";
 		
 	  string strJson = "[";
 	  orderState arrayOrderSt[];
 	  ArrayResize(arrayOrderSt,cnt,2);
-	  ArrayInitialize(arrayOrderSt,new orderState());
+	  //ArrayInitialize(arrayOrderSt,new orderState());
 	  
 	  string arrayStrJson[];
 	  ArrayResize(arrayStrJson,cnt,2);
-	  ArrayInitialize(arrayStrJson, "");
+	 // ArrayInitialize(arrayStrJson, "");
 	  
 	  int cntOrders = 0;
 	  
@@ -63,11 +74,15 @@ string scanOrders::scan()
 			arrayOrderSt[ind].setOrderLots(OrderLots());
 			arrayOrderSt[ind].setOrderOpenTime(OrderOpenTime());
 			arrayOrderSt[ind].setOrderType(OrderType());
-			arrayOrderSt[ind].setStrOrderType(string strOrderType);
+			
 			arrayOrderSt[ind].setOrderTakeProfit(OrderTakeProfit());
 			arrayOrderSt[ind].setOrderStopLoss(OrderStopLoss());
 			cntOrders++;
+			string str = arrayOrderSt[ind].toJson();
 			arrayStrJson[ind] = arrayOrderSt[ind].toJson();
+			str = arrayStrJson[ind];
+			str = "";
+			
       }
 
 	  return StringArrayToJson( cntOrders, arrayStrJson);
@@ -76,6 +91,9 @@ string scanOrders::scan()
 bool scanOrders::scanAndSave()
 {
 	string strOrders = scan();
+	  
+	if(StringLen(strOrders) <2 )  
+	   return true;
 	  
 	//Стираем файлы
 	if(FileIsExist(strFileName)){
@@ -93,4 +111,22 @@ bool scanOrders::scanAndSave()
 	}
 	return false;
 	  
+}
+
+string scanOrders::StringArrayToJson( int sizeArray, string& strArray[] ) {
+
+	string strJson = "[";
+	//int n = ArraySize( strArray );
+	for( int ind = 0; ind < sizeArray; ind++ ) {
+		
+		if(ind>0)
+			strJson = strJson + ",";
+			
+		string str = strArray[ind];
+		strJson = strJson + strArray[ind];
+	
+	};
+	strJson = strJson + "]";
+	return strJson;
+	
 }
